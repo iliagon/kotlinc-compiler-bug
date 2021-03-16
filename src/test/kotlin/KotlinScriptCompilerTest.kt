@@ -41,18 +41,23 @@ internal class KotlinScriptCompilerTest {
     }
 
     @Test
-    fun success() {
-        compile(listOf(func1, func2), compiledScriptSrcBaseDir, listOf()) // <- works fine. See the issue in test below
+    fun success1() {
+        compile(listOf(func1, func2), compiledScriptSrcBaseDir, listOf())
         compile(testScript, compiledScriptSrcBaseDir, listOf(compiledScriptSrcBaseDir))
     }
 
     @Test
-    fun fail() {
-//        compileScript(listOf(sharScript1, sharScript2), compiledScriptSrcBaseDir, listOf())
-//      Want to compile func1 and func2 one by one!
+    fun success2() {
+        compile(func2, compiledScriptSrcBaseDir, listOf())
+        compile(func1, compiledScriptSrcBaseDir, listOf())
+        compile(testScript, compiledScriptSrcBaseDir, listOf(compiledScriptSrcBaseDir))
+    }
+
+    @Test
+    fun fail() { // <- UNEXPECTED BEHAVIOUR THERE!
+        //Want to compile Func1.kt, Func2.kt and Test.kt one by one!
         compile(func1, compiledScriptSrcBaseDir, listOf())
         compile(func2, compiledScriptSrcBaseDir, listOf())
-
         compile(testScript, compiledScriptSrcBaseDir, listOf(compiledScriptSrcBaseDir))
         //  ^^    Catch the exception: "unresolved reference: test1"
     }
@@ -71,9 +76,8 @@ internal class KotlinScriptCompilerTest {
                 KotlinCoreEnvironment.createForProduction(disposable, conf, EnvironmentConfigFiles.JVM_CONFIG_FILES)
             val success = KotlinToJVMBytecodeCompiler.compileBunchOfSources(env)
             if (!success)
-                throw RuntimeException(messageCollector.errorMessage);
+                throw RuntimeException(messageCollector.errorMessage)
         } finally {
-            KotlinCoreEnvironment.disposeApplicationEnvironment()
             Disposer.dispose(disposable)
         }
     }
