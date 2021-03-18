@@ -27,9 +27,9 @@ import java.nio.file.Path
 
 internal class KotlinScriptCompilerTest {
 
-    val func1 = Path.of("src/test/resources/test.kotlin.script/common/Func1.kt")
-    val func2 = Path.of("src/test/resources/test.kotlin.script/common/Func2.kt")
-    val testScript = Path.of("src/test/resources/test.kotlin.script/Test.kt")
+    val func1 = Path.of("src/test/resources/test/kotlin/script/Func1.kt")
+    val func2 = Path.of("src/test/resources/test/kotlin/script/Func2.kt")
+    val testScript = Path.of("src/test/resources/test/kotlin/script/Test.kt")
 
     @TempDir
     lateinit var tempDir: Path
